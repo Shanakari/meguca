@@ -1,6 +1,6 @@
 select t.sticky, t.board, t.postCtr, t.imageCtr, t.replyTime, t.bumpTime,
-		t.subject, t.locked,
-		p.banned, p.spoiler, p.deleted, p.sage, t.id, p.time, p.body,
+		t.subject, t.nonLive, t.locked,
+		p.editing, p.banned, p.spoiler, p.deleted, p.sage, t.id, p.time, p.body,
 		p.flag, p.name, p.trip, p.auth, p.links, p.commands, p.imageName,
 		posterID,
 		i.*
@@ -9,4 +9,4 @@ select t.sticky, t.board, t.postCtr, t.imageCtr, t.replyTime, t.bumpTime,
 		on t.id = p.id
 	left outer join images as i
 		on p.SHA1 = i.SHA1
-	where t.id = $1
+where t.id = $1
