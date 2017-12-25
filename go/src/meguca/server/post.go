@@ -26,6 +26,7 @@ func createThread(w http.ResponseWriter, r *http.Request) {
 	req := websockets.ThreadCreationRequest{
 		Subject:              f.Get("subject"),
 		Board:                f.Get("board"),
+		NonLive:              f.Get("nonLive") == "on", 
 		ReplyCreationRequest: repReq,
 	}
 
