@@ -1,5 +1,4 @@
 // Name, tripcode and staff title persistence and postform propagation
-
 import { BannerModal } from '../../base'
 import { extend, emitChanges, ChangeEmitter } from '../../util'
 import { loginID, sessionToken } from "../../mod"
@@ -9,6 +8,7 @@ const base64 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_
 interface Identity extends ChangeEmitter {
 	auth: boolean
 	sage: boolean
+	live: boolean
 	name: string
 	postPassword: string
 	[index: string]: any
@@ -20,6 +20,8 @@ let identity = {
 	sage: localStorage.getItem("sage") === "true",
 	postPassword: randomID(64),
 } as Identity
+const liveKey = localStorage.getItem("live")
+identity.live = liveKey ? liveKey === "true" : true
 export default identity = emitChanges(identity)
 
 // Poster identity input panel
