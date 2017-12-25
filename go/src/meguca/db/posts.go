@@ -256,8 +256,16 @@ func genPostCreationArgs(p Post) []interface{} {
 // migrations.
 func WritePost(tx *sql.Tx, p Post) (err error) {
 	_, err = getExecutor(tx, "write_post").Exec(genPostCreationArgs(p)...)
-	return
-}
+	if err != nil {
+		return
+	}
+
+	if p.Editing {
+		err = SetOpenBody(p.ID, []byte(p.Body))
+	}
+
+ 	return
+ }
 
 // GetPostPassword retrieves a post's modification password
 func GetPostPassword(id uint64) (p []byte, err error) {
