@@ -1,5 +1,4 @@
 // Background controller. Wallpapers, proper fitting and video backgrounds.
-
 import stackBlur from './stackBlur'
 import options from '.'
 import { displayLoading } from '../state'
@@ -14,6 +13,7 @@ type BackgroundStore = {
 
 type BackgroundGradients = {
 	normal: string
+	editing: string
 	highlight: string
 }
 
@@ -24,10 +24,12 @@ const container = document.getElementById("user-background"),
 const colourMap: { [key: string]: BackgroundGradients } = {
 	glass: {
 		normal: 'rgba(40, 42, 46, 0.5)',
+		editing: 'rgba(105, 105, 105, 0.5)',
 		highlight: 'rgba(64, 67, 73, .5)',
 	},
 	ocean: {
 		normal: 'rgba(28, 29, 34, 0.78)',
+		editing: 'rgba(44, 57, 71, 0.88)',
 		highlight: 'rgba(44, 44, 51, 0.88)',
 	}
 }
@@ -94,7 +96,7 @@ async function renderBackground(bg?: BackgroundStore): Promise<void> {
 		}`
 
 	// Add blurred background image to elements, if theme is glass or ocean
-	const { theme } = options
+	const {theme} = options
 	if (theme === 'glass' || theme === 'ocean') {
 		html += ' ' + renderGlass(theme, bg.blurred)
 	}
@@ -103,12 +105,18 @@ async function renderBackground(bg?: BackgroundStore): Promise<void> {
 
 // Apply transparent blurred glass background to elements with the 'glass' class
 function renderGlass(theme: string, blob: Blob): string {
-	const { normal, highlight } = colourMap[theme],
+	const {normal, editing, highlight} = colourMap[theme],
 		blurred = URL.createObjectURL(blob)
 	return HTML
 		`.glass {
 			background:
 				linear-gradient(${normal}, ${normal}),
+				url(${blurred}) center fixed no-repeat;
+			background-size: cover;
+		}
+		article.editing {
+			background:
+				linear-gradient(${editing}, ${editing}),
 				url(${blurred}) center fixed no-repeat;
 			background-size: cover;
 		}
