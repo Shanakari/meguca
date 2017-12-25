@@ -44,7 +44,6 @@ export function extractPost(
 	model.backlinks = backlinks[post.id]
 
 	// Apply client-specific formatting to a post rendered server-side
-
 	// Render time-zone correction or relative time. Will do unneeded work,
 	// if client is on UTC. Meh.
 	view.renderTime()
@@ -126,6 +125,17 @@ export function hidePosts() {
 	for (let post of posts) {
 		if (hidden.has(post.id)) {
 			hideRecursively(post)
+		}
+	}
+}
+
+// If the post is still open, rerender its body, to sync the parser state.
+// Needs to be done after models are populated to resolve temporary image links
+// in open posts.
+export function reparseOpenPosts() {
+	for (let m of posts) {
+		if (m.editing) {
+			m.view.reparseBody()
 		}
 	}
 }
