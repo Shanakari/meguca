@@ -149,7 +149,7 @@ func createReply(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	feeds.InsertPostInto(post.ID, post.OP, msg)
+	feeds.InsertPostInto(post.StandalonePost, msg)
 	url := fmt.Sprintf(`/%s/%d?last100=true#bottom`, board, op)
 	http.Redirect(w, r, url, 303)
 }
