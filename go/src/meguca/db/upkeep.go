@@ -6,7 +6,7 @@ import (
 	"database/sql"
 	"log"
 	"math"
- 	"meguca/common" 
+	"meguca/common"
 	"meguca/config"
 	"meguca/imager/assets"
 	"strings"
@@ -34,7 +34,7 @@ func runCleanupTasks() {
 }
 
 func runMinuteTasks() {
- 	logError("open post cleanup", closeDanglingPosts()) 
+	logError("open post cleanup", closeDanglingPosts())
 	logPrepared("expire_image_tokens", "expire_bans")
 }
 
@@ -46,7 +46,7 @@ func runHourTasks() {
 	logError("thread cleanup", deleteOldThreads())
 	logError("board cleanup", deleteUnusedBoards())
 	logError("image cleanup", deleteUnusedImages())
- 	logError("delete dangling open post bodies", cleanUpOpenPostBodies()) 
+	logError("delete dangling open post bodies", cleanUpOpenPostBodies())
 	_, err := db.Exec(`vacuum`)
 	logError("vaccum database", err)
 }
