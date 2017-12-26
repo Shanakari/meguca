@@ -9,4 +9,4 @@ select t.sticky, t.board, t.postCtr, t.imageCtr, t.replyTime, t.bumpTime,
 		on t.id = p.id
 	left outer join images as i
 		on p.SHA1 = i.SHA1
-where t.id = $1
+	where t.id = $1

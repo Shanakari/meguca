@@ -12,4 +12,4 @@ select t.sticky, t.board, t.postCtr, t.imageCtr, t.replyTime, t.bumpTime,
 	where t.board = $1
 	order by
 		sticky desc,
-bumpTime desc
+		bumpTime desc

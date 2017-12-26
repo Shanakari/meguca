@@ -63,20 +63,19 @@ type Feed struct {
 	// Send various simple messages targeted at a specific post
 	sendPostMessage chan postMessage
 	// Set body of an open post
-	setOpenBody chan postBodyModMessage 
+	setOpenBody chan postBodyModMessage
 	// Subscribed clients
 	clients []common.Client
 }
 
 // Read existing posts into cache and start main loop
 func (f *Feed) Start() (err error) {
- 	thread, err := db.GetThread(f.id, 0) 
+	thread, err := db.GetThread(f.id, 0)
 	if err != nil {
 		return
 	}
-	
- 	f.cache = newThreadCache(thread) 
-	
+	f.cache = newThreadCache(thread)
+
 	go func() {
 		// Stop the timer, if there are no messages and resume on new ones.
 		// Keeping the goroutine asleep reduces CPU usage.
@@ -93,7 +92,7 @@ func (f *Feed) Start() (err error) {
 					c.Send(f.cache.encodeThread(c.Last100()))
 				} else {
 					c.Send(f.cache.genSyncMessage())
-				} 
+				}
 				f.sendIPCount()
 
 			// Remove client and close feed, if no clients left
@@ -162,20 +161,21 @@ func (f *Feed) Start() (err error) {
 				f.cache.ImageCtr++
 				f.write(msg.msg)
 				f.cache.deleteMemoized(msg.id)
+
 			// Various post-related messages
 			case msg := <-f.sendPostMessage:
- 				f.startIfPaused() 
+				f.startIfPaused()
 				switch msg.typ {
 				case closePost:
 					p := f.cache.Posts[msg.id]
 					p.Editing = false
-					f.cache.Posts[msg.id] = p 
+					f.cache.Posts[msg.id] = p
 				case spoilerImage:
 					p := f.cache.Posts[msg.id]
 					if p.Image != nil {
 						p.Image.Spoiler = true
 					}
-					f.cache.Posts[msg.id] = p 
+					f.cache.Posts[msg.id] = p
 				case ban:
 					p := f.cache.Posts[msg.id]
 					p.Banned = true

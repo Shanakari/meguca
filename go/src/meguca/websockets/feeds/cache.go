@@ -1,4 +1,3 @@
-
 package feeds
 
 import (
@@ -41,7 +40,7 @@ func newThreadCache(t common.Thread) threadCache {
 			id:        t.ID,
 			Sticky:    t.Sticky,
 			NonLive:   t.NonLive,
-  		Locked:    t.Locked,
+			Locked:    t.Locked,
 			PostCtr:   t.PostCtr,
 			ImageCtr:  t.ImageCtr,
 			ReplyTime: t.ReplyTime,
@@ -196,4 +195,4 @@ func (c *threadCache) encodeThread(last100 bool) []byte {
 // Clear memoized post JSON, if any
 func (c *threadCache) deleteMemoized(id uint64) {
 	delete(c.memoized, id)
-} 
+}

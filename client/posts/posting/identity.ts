@@ -1,4 +1,5 @@
 // Name, tripcode and staff title persistence and postform propagation
+
 import { BannerModal } from '../../base'
 import { extend, emitChanges, ChangeEmitter } from '../../util'
 import { loginID, sessionToken } from "../../mod"

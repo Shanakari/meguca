@@ -18,9 +18,10 @@ export default class FormModel extends Post {
 	public nonLive = (posts.get(page.thread) as any).nonLive || !identity.live
 
 	public needCaptcha: boolean // Need to solve a captcha to allocate
+
 	// Text that is not submitted yet to defer post allocation
 	public bufferedText: string
-	public bufferedFile: File // Same for file uploads
+
 	public inputBody = ""
 	public view: FormView
 
@@ -228,15 +229,19 @@ export default class FormModel extends Post {
 
 	// Commit a post made with live updates disabled
 	public async commitNonLive() {
-		if (!this.bufferedText && !this.bufferedFile) {
+		let files: FileList
+		if (this.view.upload) {
+			files = this.view.upload.input.files
+		}
+		if (!this.bufferedText && !files.length) {
 			return postSM.feed(postEvent.done)
 		}
 
 		this.sentAllocRequest = true
 
 		const req = newAllocRequest()
-		if (this.bufferedFile) {
-			req["image"] = await this.view.upload.uploadFile(this.bufferedFile)
+		if (files.length) {
+			req["image"] = await this.view.upload.uploadFile(files[0])
 		}
 		if (this.bufferedText) {
 			req["body"] = this.body = this.bufferedText
@@ -306,18 +311,14 @@ export default class FormModel extends Post {
 	}
 
 	// Upload the file and request its allocation
-	public async uploadFile(file?: File) {
-		// Need a captcha and none submitted. Protects from no-captcha drops
-		// allocating post too soon.
-		if (this.needCaptcha) {
-			if (file) {
-				this.bufferedFile = file
-			}
-			return
+	public async uploadFile(files?: FileList) {
+		if (files && this.view.upload) {
+			(this.view.upload.input.files as any) = files
 		}
 
-		if (this.nonLive) {
-			this.bufferedFile = file || this.view.upload.input.files[0]
+		// Need a captcha and none submitted. Protects from no-captcha drops
+		// allocating post too soon.
+		if (this.needCaptcha || this.nonLive) {
 			return
 		}
 
@@ -326,7 +327,7 @@ export default class FormModel extends Post {
 			return
 		}
 
-		const data = await this.view.upload.uploadFile(file)
+		const data = await this.view.upload.uploadFile()
 		// Upload failed, canceled, image added while thumbnailing or post
 		// closed
 		if (!data || this.image || !this.editing) {

@@ -28,7 +28,7 @@ func (o *openPost) init(p common.StandalonePost) {
 	o.countLines()
 	if p.Image != nil {
 		o.hasImage = true
-    o.isSpoilered = p.Image.Spoiler
+		o.isSpoilered = p.Image.Spoiler
 	}
 }
 
@@ -40,4 +40,4 @@ func (o *openPost) countLines() {
 			o.lines++
 		}
 	}
-} 
+}

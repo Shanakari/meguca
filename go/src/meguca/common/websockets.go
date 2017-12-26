@@ -30,7 +30,7 @@ const (
 const (
 	MessageSynchronise MessageType = 30 + iota
 	MessageReclaim
-	
+
 	// Send new post ID to client
 	MessagePostID
 

@@ -9,7 +9,7 @@ import { expandThreadForm } from "./threads"
 // Handle file drop
 function onDrop(e: DragEvent) {
 	const { files } = e.dataTransfer
-	const target = e.target as HTMLElement;
+	const target = e.target as HTMLElement
 
 	if (!files.length
 		|| (target.matches && target.matches("input[type=file]"))
@@ -38,7 +38,7 @@ function onDrop(e: DragEvent) {
 	// Neither disconnected, errored or already has image
 	const m = trigger("getPostModel") as FormModel
 	if (m && !m.image) {
-		m.setUploads(files)
+		m.uploadFile(files)
 	}
 }
 

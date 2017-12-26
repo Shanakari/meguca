@@ -27,7 +27,7 @@ func TestStreamUpdates(t *testing.T) {
 
 	// Send message
 	feeds.SendTo(1, []byte("foo"))
-	assertMessage(t, wcl, "32foo")
+	assertMessage(t, wcl, "33foo")
 
 	cl.Close(nil)
 	sv.Wait()

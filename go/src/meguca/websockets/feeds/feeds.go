@@ -17,7 +17,7 @@ var feeds = feedMap{
 // Export without circular dependency
 func init() {
 	common.SendTo = SendTo
- 	common.ClosePost = ClosePost 
+	common.ClosePost = ClosePost
 	common.BanPost = BanPost
 	common.DeletePost = DeletePost
 	common.DeleteImage = DeleteImage
@@ -43,14 +43,14 @@ func addToFeed(id uint64, c common.Client) (feed *Feed, err error) {
 			add:             make(chan common.Client),
 			remove:          make(chan common.Client),
 			send:            make(chan []byte),
- 			insertPost:      make(chan postCreationMessage), 
+			insertPost:      make(chan postCreationMessage),
 			sendPostMessage: make(chan postMessage),
 			setOpenBody:     make(chan postBodyModMessage),
 			insertImage:     make(chan imageInsertionMessage),
 			clients:         make([]common.Client, 0, 8),
 			messageBuffer:   make([]byte, 0, 1<<10),
 		}
- 		feeds.feeds[id] = feed 
+		feeds.feeds[id] = feed
 		err = feed.Start()
 		if err != nil {
 			return
